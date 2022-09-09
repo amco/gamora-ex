@@ -2,7 +2,7 @@ defmodule Gamora.OAuth do
   @moduledoc """
   OAuth2 for Amco.
   Add `:client_id` and `:client_secret` to your configuration:
-      config :ueberauth, Ueberauth.Strategy.Amco.OAuth,
+      config :ueberauth, Gamora.OAuth,
         client_id: System.get_env("AMCO_APP_ID"),
         client_secret: System.get_env("AMCO_APP_SECRET")
   """
@@ -20,7 +20,7 @@ defmodule Gamora.OAuth do
 
   @doc """
   Construct a client for requests to Amco.
-  This will be setup automatically for you in `Ueberauth.Strategy.Amco`.
+  This will be setup automatically for you in `Gamora`.
   These options are only useful for usage outside the normal callback phase
   of Ueberauth.
   """

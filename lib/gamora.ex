@@ -10,12 +10,12 @@ defmodule Gamora do
 
       config :ueberauth, Ueberauth,
         providers: [
-          amco: { Ueberauth.Strategy.Amco, [] }
+          amco: { Gamora, [] }
         ]
 
   Then include the configuration for Amco:
 
-      config :ueberauth, Ueberauth.Strategy.Amco.OAuth,
+      config :ueberauth, Gamora.OAuth,
         client_id: System.get_env("AMCO_CLIENT_ID"),
         client_secret: System.get_env("AMCO_CLIENT_SECRET")
 
@@ -52,14 +52,14 @@ defmodule Gamora do
 
       config :ueberauth, Ueberauth,
         providers: [
-          amco: { Ueberauth.Strategy.Amco, [prompt: "login"] }
+          amco: { Gamora, [prompt: "login"] }
         ]
 
   To set the default 'scopes' (permissions):
 
       config :ueberauth, Ueberauth,
         providers: [
-          amco: { Ueberauth.Strategy.Amco, [default_scope: "openid email phone"] }
+          amco: { Gamora, [default_scope: "openid email phone"] }
         ]
 
   Default is empty ("openid profile email").
