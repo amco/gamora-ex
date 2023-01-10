@@ -192,7 +192,7 @@ defmodule MyAppWeb.AuthenticationErrorHandler do
   import Phoenix.Controller
 
   @impl Gamora.ErrorHandler
-  def access_token_error(conn, %{error: error}) do
+  def access_token_error(conn, error) do
     conn
     |> redirect(to: "/auth/amco")
     |> halt()
@@ -277,7 +277,7 @@ configuration:
 ```elixir
 config :ueberauth, Ueberauth,
   providers: [
-    amco: {Gamora, [default_theme: "dark"]}
+    amco: {Gamora, [default_theme: "dark_blue"]}
   ]
 ```
 
@@ -288,7 +288,7 @@ configuration:
 ```elixir
 config :ueberauth, Ueberauth,
   providers: [
-    amco: {Gamora, [default_branding: "avanza"]}
+    amco: {Gamora, [default_branding: "amco"]}
   ]
 ```
 
