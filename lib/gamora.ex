@@ -94,6 +94,7 @@ defmodule Gamora do
       |> with_state_param(conn)
       |> with_prompt_param(conn)
       |> with_redirect_uri(conn)
+      |> with_max_age_param(conn)
       |> with_query_param(conn, :scope)
       |> with_query_param(conn, :theme)
       |> with_query_param(conn, :strategy)
@@ -231,6 +232,13 @@ defmodule Gamora do
     case conn.params["prompt"] || option(conn, :default_prompt) do
       nil -> opts
       prompt -> opts |> Keyword.put(:prompt, prompt)
+    end
+  end
+
+  defp with_max_age_param(opts, conn) do
+    case conn.params["max_age"] || option(conn, :default_max_age) do
+      nil -> opts
+      max_age -> opts |> Keyword.put(:max_age, max_age)
     end
   end
 
