@@ -71,6 +71,7 @@
     scope "/auth", MyAppWeb do
       pipe_through :browser
 
+      get "/logout", AuthController, :logout
       get "/:provider", AuthController, :request
       get "/:provider/callback", AuthController, :callback
 
@@ -143,6 +144,13 @@ defmodule MyAppWeb.AuthController do
       id_token: auth.credentials.other["id_token"],
       refresh_token: auth.credentials.refresh_token
     })
+  end
+
+  def logout(conn, _params) do
+    conn
+    |> put_session(:access_token, nil)
+    |> put_session(:refresh_token, nil)
+    |> redirect(to: ~p"/auth/amco?max_age=0")
   end
 end
 ```
