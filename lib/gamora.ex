@@ -92,11 +92,10 @@ defmodule Gamora do
     params =
       []
       |> with_state_param(conn)
-      |> with_prompt_param(conn)
-      |> with_redirect_uri(conn)
-      |> with_max_age_param(conn)
       |> with_query_param(conn, :scope)
       |> with_query_param(conn, :theme)
+      |> with_query_param(conn, :prompt)
+      |> with_query_param(conn, :max_age)
       |> with_query_param(conn, :strategy)
       |> with_query_param(conn, :branding)
 
@@ -115,7 +114,6 @@ defmodule Gamora do
 
     params =
       [code: code]
-      |> with_redirect_uri(conn)
       |> with_code_verifier_param(conn)
 
     case Gamora.OAuth.get_access_token(params, opts) do
@@ -218,27 +216,10 @@ defmodule Gamora do
     Keyword.get(default_options(), key)
   end
 
-  defp with_redirect_uri(opts, conn) do
-    Keyword.put(opts, :redirect_uri, callback_url(conn))
-  end
-
   defp with_query_param(opts, conn, param) do
-    default_param = String.to_existing_atom("default_" <> to_string(param))
-    scopes = conn.params[to_string(param)] || option(conn, default_param)
-    opts |> Keyword.put(param, scopes)
-  end
-
-  defp with_prompt_param(opts, conn) do
-    case conn.params["prompt"] || option(conn, :default_prompt) do
+    case fetch_param_value(conn, param) do
       nil -> opts
-      prompt -> opts |> Keyword.put(:prompt, prompt)
-    end
-  end
-
-  defp with_max_age_param(opts, conn) do
-    case conn.params["max_age"] || option(conn, :default_max_age) do
-      nil -> opts
-      max_age -> opts |> Keyword.put(:max_age, max_age)
+      value -> opts |> Keyword.put(param, value)
     end
   end
 
@@ -247,6 +228,11 @@ defmodule Gamora do
       nil -> opts
       code_verifier -> opts |> Keyword.put(:code_verifier, code_verifier)
     end
+  end
+
+  defp fetch_param_value(conn, param) do
+    default_param = String.to_atom("default_" <> to_string(param))
+    conn.params[to_string(param)] || option(conn, default_param)
   end
 
   defp oauth_client_options_from_conn(conn) do
