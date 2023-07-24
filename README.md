@@ -102,7 +102,7 @@ defmodule MyAppWeb.AuthController do
   def callback(%{assigns: %{ueberauth_failure: _fails}} = conn, _params) do
     conn
     |> put_flash(:error, "Failed to authenticate.")
-    |> redirect(to: "/")
+    |> redirect(to: redirect_path(conn))
   end
 
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
@@ -111,7 +111,11 @@ defmodule MyAppWeb.AuthController do
     |> put_session(:access_token, auth.credentials.token)
     |> put_session(:refresh_token, auth.credentials.refresh_token)
     |> configure_session(renew: true)
-    |> redirect(to: "/")
+    |> redirect(to: redirect_path(conn))
+  end
+
+  defp redirect_path(conn) do
+    get_session(conn, :original_url) || "/"
   end
 end
 ```
@@ -196,12 +200,13 @@ something like the following in a phoenix application:
 defmodule MyAppWeb.AuthenticationErrorHandler do
   @behaviour Gamora.ErrorHandler
 
-  import Plug.Conn
-  import Phoenix.Controller
+  import Plug.Conn, only: [halt: 1, put_session: 3]
+  import Phoenix.Controller, only: [redirect: 2]
 
   @impl Gamora.ErrorHandler
   def access_token_error(conn, error) do
     conn
+    |> put_session(:original_url, conn.request_path)
     |> redirect(to: "/auth/amco")
     |> halt()
   end

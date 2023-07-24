@@ -22,14 +22,14 @@ defmodule Gamora.Plugs.AuthenticatedUser.IdpAdapterTest do
   describe "call/2" do
     test "when source is session and access token is not present", %{conn: conn} do
       with_mock Conn, get_session: fn _, _ -> nil end do
-        assert IdpAdapter.call(conn, [access_token_source: :session]) ==
-          {:error, :access_token_required}
+        assert IdpAdapter.call(conn, access_token_source: :session) ==
+                 {:error, :access_token_required}
       end
     end
 
     test "when source is headers and access token is not present", %{conn: conn} do
-      assert IdpAdapter.call(conn, [access_token_source: :headers]) ==
-        {:error, :access_token_required}
+      assert IdpAdapter.call(conn, access_token_source: :headers) ==
+               {:error, :access_token_required}
     end
 
     test "when access token is in the session and it is valid", %{conn: conn} do
@@ -37,7 +37,7 @@ defmodule Gamora.Plugs.AuthenticatedUser.IdpAdapterTest do
         {API, [], userinfo: fn _ -> {:ok, @userinfo} end},
         {Conn, [], get_session: fn _, _ -> "XXXX" end}
       ] do
-        {:ok, user} = IdpAdapter.call(conn, [access_token_source: :session])
+        {:ok, user} = IdpAdapter.call(conn, access_token_source: :session)
         assert user.id == @userinfo["sub"]
         assert user.email == @userinfo["email"]
         assert user.first_name == @userinfo["given_name"]
@@ -49,7 +49,7 @@ defmodule Gamora.Plugs.AuthenticatedUser.IdpAdapterTest do
     test "when access token is in the headers and it is valid", %{conn: conn} do
       with_mock API, userinfo: fn _ -> {:ok, @userinfo} end do
         conn = conn |> Conn.put_req_header("authorization", "Bearer XXX")
-        {:ok, user} = IdpAdapter.call(conn, [access_token_source: :headers])
+        {:ok, user} = IdpAdapter.call(conn, access_token_source: :headers)
         assert user.id == @userinfo["sub"]
         assert user.email == @userinfo["email"]
         assert user.first_name == @userinfo["given_name"]

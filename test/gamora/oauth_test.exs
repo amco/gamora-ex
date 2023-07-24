@@ -1,4 +1,3 @@
-
 defmodule Gamora.OAuthTest do
   use ExUnit.Case
 
