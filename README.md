@@ -11,7 +11,7 @@
     ```elixir
     def deps do
       [
-        {:gamora, "~> 0.5"}
+        {:gamora, "~> 0.7"}
       ]
     end
     ```
@@ -324,11 +324,11 @@ if you want to limit sign-in to a specific domain.
 
 In test environment you should avoid making requests to authenticate
 users in protected routes. In order to do that, you can configure the
-`MockAdapter` for the `AuthenticatedUser` plug in your `config/test.exs`:
+`TestAdapter` for the `AuthenticatedUser` plug in your `config/test.exs`:
 
 ```elixir
 config :ueberauth, Gamora.Plugs.AuthenticatedUser,
-  adapter: Gamora.Plugs.AuthenticatedUser.MockAdapter
+  adapter: Gamora.Plugs.AuthenticatedUser.TestAdapter
 ```
 
 ## Copyright and License
