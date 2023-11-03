@@ -48,6 +48,8 @@ defmodule Gamora.Plugs.AuthenticatedUser.IdpAdapter do
         "given_name" -> Map.put(attrs, :first_name, value)
         "family_name" -> Map.put(attrs, :last_name, value)
         "phone_number" -> Map.put(attrs, :phone_number, value)
+        "email_verified" -> Map.put(attrs, :email_verified, value)
+        "phone_number_verified" -> Map.put(attrs, :phone_number_verified, value)
         _ -> attrs
       end
     end)
