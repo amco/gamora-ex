@@ -1,6 +1,7 @@
 defmodule Gamora.User do
   @type t :: %__MODULE__{
           id: binary | nil,
+          roles: map | nil,
           email: binary | nil,
           last_name: binary | nil,
           first_name: binary | nil,
@@ -10,6 +11,7 @@ defmodule Gamora.User do
         }
 
   defstruct id: nil,
+            roles: nil,
             email: nil,
             last_name: nil,
             first_name: nil,

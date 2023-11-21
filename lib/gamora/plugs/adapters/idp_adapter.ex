@@ -44,6 +44,7 @@ defmodule Gamora.Plugs.AuthenticatedUser.IdpAdapter do
     Enum.reduce(claims, %{}, fn {claim, value}, attrs ->
       case claim do
         "sub" -> Map.put(attrs, :id, value)
+        "roles" -> Map.put(attrs, :roles, value)
         "email" -> Map.put(attrs, :email, value)
         "given_name" -> Map.put(attrs, :first_name, value)
         "family_name" -> Map.put(attrs, :last_name, value)
