@@ -17,11 +17,11 @@ defmodule Gamora.Plugs.AuthenticatedUser do
   @impl Plug
   def init(opts) do
     unless Keyword.get(opts, :error_handler) do
-      raise Exceptions.EmptyErrorHandler
+      raise Exceptions.MissingErrorHandlerOption
     end
 
     unless Keyword.get(opts, :access_token_source) do
-      raise Exceptions.EmptyAccessTokenSource
+      raise Exceptions.MissingAccessTokenSourceOption
     end
 
     opts

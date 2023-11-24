@@ -3,18 +3,18 @@ defmodule Gamora.Plugs.AuthenticatedUserTest do
 
   alias Gamora.ErrorHandler
   alias Gamora.Plugs.AuthenticatedUser
-  alias Gamora.Exceptions.{EmptyErrorHandler, EmptyAccessTokenSource}
+  alias Gamora.Exceptions.{MissingErrorHandlerOption, MissingAccessTokenSourceOption}
 
   describe "init/1" do
     test "raise error when error_handler option is not present" do
-      assert_raise EmptyErrorHandler, fn ->
+      assert_raise MissingErrorHandlerOption, fn ->
         options = [access_token_source: :session]
         AuthenticatedUser.init(options)
       end
     end
 
     test "raise error when access_token_source option is not present" do
-      assert_raise EmptyAccessTokenSource, fn ->
+      assert_raise MissingAccessTokenSourceOption, fn ->
         options = [error_handler: ErrorHandler]
         AuthenticatedUser.init(options)
       end

@@ -23,6 +23,7 @@ defmodule Gamora.API do
       {:error, :access_token_invalid}
 
   """
+  @spec userinfo(access_token :: String.t()) :: {:ok, Response.t()} | {:error, term()}
   def userinfo(access_token) do
     case OAuth.userinfo(access_token) do
       {:ok, %Response{status_code: 200, body: body}} -> {:ok, body}
@@ -47,6 +48,7 @@ defmodule Gamora.API do
       {:error, :access_token_invalid}
 
   """
+  @spec introspect(access_token :: String.t()) :: {:ok, Response.t()} | {:error, term()}
   def introspect(access_token) do
     case OAuth.introspect(access_token) do
       {:ok, %Response{status_code: 200, body: body}} -> {:ok, body}

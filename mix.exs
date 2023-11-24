@@ -33,7 +33,8 @@ defmodule Gamora.MixProject do
       {:cachex, "~> 3.6"},
       {:ueberauth, "~> 0.10"},
       {:mock, "~> 0.3.0", only: :test},
-      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false}
     ]
   end
 
