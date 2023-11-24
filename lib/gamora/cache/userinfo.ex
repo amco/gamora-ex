@@ -1,27 +1,43 @@
 defmodule Gamora.Cache.Userinfo do
   @moduledoc """
+  This module that allows to get, set and fetch user's claims
+  in the cache in order to improve performance.
   """
 
   alias Gamora.API
   alias Gamora.Plugs.AuthenticatedUser
 
-  def get(access_token) do
-    case Cachex.get!(:gamora, key(access_token)) do
-      nil -> fetch(access_token)
-      claims -> {:ok, claims}
-    end
-  end
-
+  @doc """
+  Returns userinfo data for the given access token if
+  exists, otherwise it will fetch it and store it.
+  """
   def fetch(access_token) do
-    case API.userinfo(access_token) do
-      {:ok, claims} -> set(access_token, claims)
-      {:error, error} -> {:error, error}
+    case get(access_token) do
+      {:ok, nil} -> fetch!(access_token)
+      {:ok, claims} -> {:ok, claims}
     end
   end
 
-  def set(access_token, claims) do
+  @doc """
+  Returns userinfo data for the given access token.
+  """
+  def get(access_token) do
+    Cachex.get(:gamora, key(access_token))
+  end
+
+  @doc """
+  Stores userinfo data for the given access token.
+  """
+  def put(access_token, claims) do
     Cachex.put(:gamora, key(access_token), claims, ttl: ttl())
     {:ok, claims}
+  end
+
+  defp fetch!(access_token) do
+    case API.userinfo(access_token) do
+      {:ok, claims} -> put(access_token, claims)
+      {:error, error} -> {:error, error}
+    end
   end
 
   defp key(access_token) do

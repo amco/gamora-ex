@@ -18,9 +18,9 @@ defmodule Gamora.Plugs.AuthenticatedUser.IdpAdapter do
   def call(%Conn{} = conn, opts) do
     with source <- Keyword.get(opts, :access_token_source),
          {:ok, access_token} <- get_access_token(conn, source),
-         {:ok, token_data} <- Introspect.get(access_token),
+         {:ok, token_data} <- Introspect.fetch(access_token),
          true <- valid_introspection_data?(token_data),
-         {:ok, claims} <- Userinfo.get(access_token) do
+         {:ok, claims} <- Userinfo.fetch(access_token) do
       attributes = user_attributes_from_claims(claims)
       {:ok, struct(User, attributes)}
     else
