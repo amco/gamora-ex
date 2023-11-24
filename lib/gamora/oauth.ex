@@ -17,6 +17,7 @@ defmodule Gamora.OAuth do
   ]
 
   @userinfo_path "/oauth2/userinfo"
+  @introspect_path "/oauth2/introspect"
 
   @doc """
   Construct a client for requests to Amco.
@@ -48,6 +49,19 @@ defmodule Gamora.OAuth do
     data = %{access_token: access_token}
 
     OAuth2.Client.post(client, @userinfo_path, data, [
+      {"Content-Type", "application/json"}
+    ])
+  end
+
+  def introspect(access_token, opts \\ []) do
+    client = client(opts)
+
+    data =
+      client
+      |> Map.take([:client_id, :client_secret])
+      |> Map.put(:token, access_token)
+
+    OAuth2.Client.post(client, @introspect_path, data, [
       {"Content-Type", "application/json"}
     ])
   end

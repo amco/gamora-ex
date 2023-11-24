@@ -11,7 +11,7 @@
     ```elixir
     def deps do
       [
-        {:gamora, "~> 0.8"}
+        {:gamora, "~> 0.9"}
       ]
     end
     ```
@@ -319,6 +319,32 @@ config :ueberauth, Ueberauth,
 To guard against client-side request modification, it's important to still
 check the domain in `info.urls[:website]` within the `Ueberauth.Auth` struct
 if you want to limit sign-in to a specific domain.
+
+## Cross-Client Identity
+
+By default, gamora will accept only access tokens that were generating
+with the `client_id` in the configuration. If access tokens coming from
+other clients have to be accepted, make sure to add their client ids to
+the `whitelisted_clients` config option.
+
+```elixir
+config :ueberauth, Gamora.Plugs.AuthenticatedUser,
+  whitelisted_clients: ["OTHER_CLIENT_ID"]
+```
+
+## Caching
+
+In order to avoid performing requests to the IDP on each request in the
+application, it is possible to set a caching time for introspection and
+userinfo endpoints. Make sure to not have a too long expiration time for
+`introspect_cache_expires_in` but not too short to impact the application
+performance, it is a balance.
+
+```elixir
+config :ueberauth, Gamora.Plugs.AuthenticatedUser,
+  introspect_cache_expires_in: :timer.seconds(5),
+  userinfo_cache_expires_in: :timer.minutes(10)
+```
 
 ## Testing
 

@@ -11,16 +11,18 @@ defmodule Gamora.Plugs.AuthenticatedUser.IdpAdapter do
   """
 
   alias Plug.Conn
-  alias Gamora.API
   alias Gamora.User
+  alias Gamora.Plugs.AuthenticatedUser
+  alias Gamora.Cache.{Userinfo, Introspect}
 
   def call(%Conn{} = conn, opts) do
-    source = Keyword.get(opts, :access_token_source)
-
-    with {:ok, access_token} <- get_access_token(conn, source),
-         {:ok, claims} <- API.userinfo(access_token) do
-      attrs = user_attributes_from_claims(claims)
-      {:ok, struct(User, attrs)}
+    with source <- Keyword.get(opts, :access_token_source),
+         {:ok, access_token} <- get_access_token(conn, source),
+         {:ok, token_data} <- Introspect.get(access_token),
+         true <- valid_introspection_data?(token_data),
+         {:ok, claims} <- Userinfo.get(access_token) do
+      attributes = user_attributes_from_claims(claims)
+      {:ok, struct(User, attributes)}
     else
       {:error, error} -> {:error, error}
     end
@@ -38,6 +40,21 @@ defmodule Gamora.Plugs.AuthenticatedUser.IdpAdapter do
       nil -> {:error, :access_token_required}
       token -> {:ok, token}
     end
+  end
+
+  defp valid_introspection_data?(%{"active" => active, "client_id" => client_id}) do
+    active && Enum.member?(whitelisted_clients(), client_id)
+  end
+
+  defp whitelisted_clients do
+    Application.get_env(:ueberauth, AuthenticatedUser, [])
+    |> Keyword.get(:whitelisted_clients, [])
+    |> Kernel.++([application_client_id()])
+  end
+
+  defp application_client_id do
+    Application.get_env(:ueberauth, Gamora.OAuth, [])
+    |> Keyword.get(:client_id)
   end
 
   defp user_attributes_from_claims(claims) do

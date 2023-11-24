@@ -2,7 +2,7 @@ defmodule Gamora.MixProject do
   use Mix.Project
 
   @source_url "https://github.com/amco/gamora-ex"
-  @version "0.8.0"
+  @version "0.9.0"
 
   def project do
     [
@@ -30,6 +30,7 @@ defmodule Gamora.MixProject do
     [
       {:jason, "~> 1.3"},
       {:oauth2, "~> 2.0"},
+      {:cachex, "~> 3.6"},
       {:ueberauth, "~> 0.10"},
       {:mock, "~> 0.3.0", only: :test},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
