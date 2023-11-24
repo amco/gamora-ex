@@ -7,7 +7,7 @@ defmodule Gamora.Cache.UserinfoTest do
   alias Gamora.Cache.Userinfo
 
   @access_token "ACCESS_TOKEN"
-  @data %{id: 1}
+  @data %{"sub" => 1}
 
   describe "fetch/1" do
     test "returns data when is stored" do

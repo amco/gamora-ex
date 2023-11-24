@@ -7,7 +7,7 @@ defmodule Gamora.Cache.IntrospectTest do
   alias Gamora.Cache.Introspect
 
   @access_token "ACCESS_TOKEN"
-  @data %{active: true}
+  @data %{"active" => true}
 
   describe "fetch/1" do
     test "returns data when is stored" do
