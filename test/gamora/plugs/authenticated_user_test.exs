@@ -3,8 +3,7 @@ defmodule Gamora.Plugs.AuthenticatedUserTest do
 
   alias Gamora.ErrorHandler
   alias Gamora.Plugs.AuthenticatedUser
-  alias Gamora.Exceptions.EmptyErrorHandler
-  alias Gamora.Exceptions.EmptyAccessTokenSource
+  alias Gamora.Exceptions.{EmptyErrorHandler, EmptyAccessTokenSource}
 
   describe "init/1" do
     test "raise error when error_handler option is not present" do

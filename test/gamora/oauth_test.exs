@@ -1,5 +1,5 @@
 defmodule Gamora.OAuthTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   alias Gamora.OAuth
   alias Gamora.Exceptions.MissingSiteConfiguration
