@@ -10,7 +10,18 @@ defmodule Gamora.Cache.Userinfo do
   @doc """
   Returns userinfo data for the given access token if
   exists, otherwise it will fetch it and store it.
+
+  ## Parameters
+
+    - access_token: String [Access token from IDP].
+
+  ## Examples
+
+      iex> fetch("ACCESS_TOKEN")
+      {:ok, %{"id" => 1, ...}}
+
   """
+  @spec fetch(access_token :: String.t()) :: {:ok, map()} | {:error, term()}
   def fetch(access_token) do
     case get(access_token) do
       {:ok, nil} -> fetch!(access_token)
@@ -20,14 +31,39 @@ defmodule Gamora.Cache.Userinfo do
 
   @doc """
   Returns userinfo data for the given access token.
+
+  ## Parameters
+
+    - access_token: String [Access token from IDP].
+
+  ## Examples
+
+      iex> get("ACCESS_TOKEN")
+      {:ok, nil}
+
+      iex> get("ACCESS_TOKEN")
+      {:ok, %{"id" => 1, ...}}
+
   """
+  @spec get(access_token :: String.t()) :: {:ok, nil} | {:ok, map()}
   def get(access_token) do
     Cachex.get(:gamora, key(access_token))
   end
 
   @doc """
   Stores userinfo data for the given access token.
+
+  ## Parameters
+
+    - access_token: String [Access token from IDP].
+
+  ## Examples
+
+      iex> put("ACCESS_TOKEN", %{"id" => 1, ...})
+      {:ok, %{"id" => 1, ...}}
+
   """
+  @spec put(access_token :: String.t(), claims :: map()) :: {:ok, map()}
   def put(access_token, claims) do
     Cachex.put(:gamora, key(access_token), claims, ttl: ttl())
     {:ok, claims}
