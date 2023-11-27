@@ -38,6 +38,7 @@ defmodule Gamora.MixProject do
       {:oauth2, "~> 2.0"},
       {:cachex, "~> 3.6"},
       {:ueberauth, "~> 0.10"},
+      {:faker, "~> 0.17", only: :test},
       {:mock, "~> 0.3.0", only: :test},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false}
