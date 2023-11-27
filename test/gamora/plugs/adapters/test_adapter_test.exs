@@ -1,5 +1,5 @@
 defmodule Gamora.Plugs.AuthenticatedUser.TestAdapterTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
 
   alias Plug.Conn
   alias Gamora.User
