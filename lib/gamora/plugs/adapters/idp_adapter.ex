@@ -19,12 +19,10 @@ defmodule Gamora.Plugs.AuthenticatedUser.IdpAdapter do
     with source <- Keyword.get(opts, :access_token_source),
          {:ok, access_token} <- get_access_token(conn, source),
          {:ok, token_data} <- Introspect.fetch(access_token),
-         true <- valid_introspection_data?(token_data),
+         {:ok, _} <- validate_introspection_data(token_data),
          {:ok, claims} <- Userinfo.fetch(access_token) do
       attributes = user_attributes_from_claims(claims)
       {:ok, struct(User, attributes)}
-    else
-      {:error, error} -> {:error, error}
     end
   end
 
@@ -42,8 +40,15 @@ defmodule Gamora.Plugs.AuthenticatedUser.IdpAdapter do
     end
   end
 
-  defp valid_introspection_data?(%{"active" => active, "client_id" => client_id}) do
-    active && Enum.member?(whitelisted_clients(), client_id)
+  defp validate_introspection_data(%{"active" => false}) do
+    {:error, :access_token_invalid}
+  end
+
+  defp validate_introspection_data(%{"active" => true, "client_id" => client_id}) do
+    case Enum.member?(whitelisted_clients(), client_id) do
+      true -> {:ok, :valid_introspect_data}
+      false -> {:error, :access_token_invalid}
+    end
   end
 
   defp whitelisted_clients do

@@ -69,6 +69,24 @@ defmodule Gamora.Cache.Userinfo do
     {:ok, claims}
   end
 
+  @doc """
+  Deletes userinfo cache for the given access token.
+
+  ## Parameters
+
+    - access_token: String [Access token from IDP].
+
+  ## Examples
+
+      iex> del("ACCESS_TOKEN")
+      {:ok, true}
+
+  """
+  @spec del(access_token :: String.t()) :: {:ok, map()}
+  def del(access_token) do
+    Cachex.del(:gamora, key(access_token))
+  end
+
   defp fetch!(access_token) do
     case API.userinfo(access_token) do
       {:ok, claims} -> put(access_token, claims)

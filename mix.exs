@@ -21,6 +21,7 @@ defmodule Gamora.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
+      mod: {Gamora.Application, []},
       extra_applications: [:logger, :oauth2, :ueberauth]
     ]
   end

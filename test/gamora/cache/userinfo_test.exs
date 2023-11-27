@@ -1,5 +1,5 @@
 defmodule Gamora.Cache.UserinfoTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
 
   import Mock
 
@@ -16,6 +16,8 @@ defmodule Gamora.Cache.UserinfoTest do
     end
 
     test "fetches data when is not stored" do
+      {:ok, _} = Userinfo.del(@access_token)
+
       with_mock API, userinfo: fn _ -> {:ok, @data} end do
         assert {:ok, @data} == Userinfo.fetch(@access_token)
       end
@@ -29,14 +31,22 @@ defmodule Gamora.Cache.UserinfoTest do
     end
 
     test "returns nil when is not stored" do
+      {:ok, _} = Userinfo.del(@access_token)
       assert {:ok, nil} == Userinfo.get(@access_token)
     end
   end
 
-  describe "put/1" do
+  describe "put/2" do
     test "puts data in the cache" do
       assert {:ok, @data} == Userinfo.put(@access_token, @data)
       assert Userinfo.get(@access_token) == {:ok, @data}
+    end
+  end
+
+  describe "del/1" do
+    test "deletes data in the cache" do
+      assert {:ok, @data} == Userinfo.put(@access_token, @data)
+      assert {:ok, true} == Userinfo.del(@access_token)
     end
   end
 end
