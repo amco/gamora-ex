@@ -28,7 +28,7 @@ defmodule Gamora.Plugs.AuthenticatedUser.IdpAdapterTest do
   }
 
   setup do
-    Application.put_env(:ueberauth, Gamora.OAuth, [client_id: "CLIENT_ID"])
+    Application.put_env(:ueberauth, Gamora.OAuth, client_id: "CLIENT_ID")
     :ok
   end
 
@@ -103,7 +103,7 @@ defmodule Gamora.Plugs.AuthenticatedUser.IdpAdapterTest do
 
     test "when access token is in the headers but is not active", %{conn: conn} do
       with_mocks [
-        {Introspect, [], fetch: fn _ -> {:ok, %{"active" => false}} end},
+        {Introspect, [], fetch: fn _ -> {:ok, %{"active" => false}} end}
       ] do
         error = {:error, :access_token_invalid}
         conn = conn |> Conn.put_req_header("authorization", "Bearer XXX")
@@ -113,7 +113,7 @@ defmodule Gamora.Plugs.AuthenticatedUser.IdpAdapterTest do
 
     test "when access token is in the headers but is coming from another client", %{conn: conn} do
       with_mocks [
-        {Introspect, [], fetch: fn _ -> {:ok, %{"active" => true, "client_id" => "XXX"}} end},
+        {Introspect, [], fetch: fn _ -> {:ok, %{"active" => true, "client_id" => "XXX"}} end}
       ] do
         error = {:error, :access_token_invalid}
         conn = conn |> Conn.put_req_header("authorization", "Bearer XXX")

@@ -338,12 +338,12 @@ In order to avoid performing requests to the IDP on each request in the
 application, it is possible to set a caching time for introspection and
 userinfo endpoints. Make sure to not have a too long expiration time for
 `introspect_cache_expires_in` but not too short to impact the application
-performance, it is a balance.
+performance, it is a balance. Expiration config is based on seconds.
 
 ```elixir
 config :ueberauth, Gamora.Plugs.AuthenticatedUser,
-  introspect_cache_expires_in: :timer.seconds(5),
-  userinfo_cache_expires_in: :timer.minutes(10)
+  introspect_cache_expires_in: 5, # Config in seconds.
+  userinfo_cache_expires_in: 600  # Config in seconds.
 ```
 
 ## Testing

@@ -26,7 +26,6 @@ defmodule Gamora.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      mod: {Gamora.Application, []},
       extra_applications: [:logger, :oauth2, :ueberauth]
     ]
   end
@@ -35,6 +34,8 @@ defmodule Gamora.MixProject do
   defp deps do
     [
       {:jason, "~> 1.3"},
+      {:redix, "~> 1.3"},
+      {:castore, ">= 0.0.0"},
       {:oauth2, "~> 2.0"},
       {:cachex, "~> 3.6"},
       {:ueberauth, "~> 0.10"},
