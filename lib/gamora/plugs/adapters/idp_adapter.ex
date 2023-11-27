@@ -63,18 +63,15 @@ defmodule Gamora.Plugs.AuthenticatedUser.IdpAdapter do
   end
 
   defp user_attributes_from_claims(claims) do
-    Enum.reduce(claims, %{}, fn {claim, value}, attrs ->
-      case claim do
-        "sub" -> Map.put(attrs, :id, value)
-        "roles" -> Map.put(attrs, :roles, value)
-        "email" -> Map.put(attrs, :email, value)
-        "given_name" -> Map.put(attrs, :first_name, value)
-        "family_name" -> Map.put(attrs, :last_name, value)
-        "phone_number" -> Map.put(attrs, :phone_number, value)
-        "email_verified" -> Map.put(attrs, :email_verified, value)
-        "phone_number_verified" -> Map.put(attrs, :phone_number_verified, value)
-        _ -> attrs
-      end
-    end)
+    %{
+      id: claims["sub"],
+      roles: claims["roles"],
+      email: claims["email"],
+      first_name: claims["given_name"],
+      last_name: claims["family_name"],
+      phone_number: claims["phone_number"],
+      email_verified: claims["email_verified"],
+      phone_number_verified: claims["phone_number_verified"]
+    }
   end
 end
