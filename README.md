@@ -346,6 +346,16 @@ config :ueberauth, Gamora.Plugs.AuthenticatedUser,
   userinfo_cache_expires_in: 600  # Config in seconds.
 ```
 
+By default, Gamora uses ETS to cache data from IDP but any other cache
+adapter may be implemented, for example using Redix, Nebulex, Cachex or
+any other. See [adapters](https://github.com/amco/gamora-ex/blob/master/CACHE_ADAPTERS.md)
+for more information. Then, specify the adapter in the configuration:
+
+```elixir
+config :ueberauth, Gamora.Plugs.AuthenticatedUser,
+  cache_adapter: Gamora.Cache.Adapters.ETS
+```
+
 ## Testing
 
 In test environment you should avoid making requests to authenticate
@@ -362,4 +372,4 @@ config :ueberauth, Gamora.Plugs.AuthenticatedUser,
 Copyright (c) 2022 Amco
 
 Released under the MIT License, which can be found in the repository in
-[LICENSE](https://github.com/amco/ueberauth_amco/blob/master/LICENSE).
+[LICENSE](https://github.com/amco/gamora-ex/blob/master/LICENSE).

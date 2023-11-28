@@ -34,10 +34,7 @@ defmodule Gamora.MixProject do
   defp deps do
     [
       {:jason, "~> 1.3"},
-      {:redix, "~> 1.3"},
-      {:castore, ">= 0.0.0"},
       {:oauth2, "~> 2.0"},
-      {:cachex, "~> 3.6"},
       {:ueberauth, "~> 0.10"},
       {:faker, "~> 0.17", only: :test},
       {:mock, "~> 0.3.0", only: :test},
