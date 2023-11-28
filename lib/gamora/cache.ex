@@ -1,5 +1,7 @@
 defmodule Gamora.Cache do
-  @moduledoc false
+  @moduledoc """
+  Default Gamora cache implementation.
+  """
 
   use Nebulex.Cache,
     otp_app: :gamora,
