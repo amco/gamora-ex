@@ -342,8 +342,8 @@ performance, it is a balance.
 
 ```elixir
 config :ueberauth, Gamora.Plugs.AuthenticatedUser,
-  introspect_cache_expires_in: :timer.seconds(5),
-  userinfo_cache_expires_in: :timer.minutes(10)
+  introspect_cache_expires_in: :timer.seconds(0), # Default value
+  userinfo_cache_expires_in: :timer.minutes(1)    # Default value
 ```
 
 Then, add `Gamora.Cache` in `lib/my_app/application.ex`:
