@@ -88,7 +88,7 @@ defmodule Gamora.Cache do
 
       defp adapter do
         Application.get_env(:ueberauth, AuthenticatedUser, [])
-        |> Keyword.get(:cache_adapter, Gamora.Cache.Adapters.Cachex)
+        |> Keyword.get(:cache_adapter, Gamora.Cache.Adapters.ETS)
       end
     end
   end

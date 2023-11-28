@@ -1,2 +1,2 @@
-{:ok, _} = Cachex.start_link(name: :gamora)
+:ets.new(:gamora, [:set, :public, :named_table])
 ExUnit.start()
