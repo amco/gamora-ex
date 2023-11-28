@@ -346,8 +346,26 @@ config :ueberauth, Gamora.Plugs.AuthenticatedUser,
   userinfo_cache_expires_in: :timer.minutes(10)
 ```
 
+Then, add `Gamora.Cache` in `lib/my_app/application.ex`:
+
+```elixir
+defmodule MyApp.Application do
+  use Application
+
+  @impl true
+  def start(_type, _args) do
+    children =
+      [
+        Gamora.Cache,
+        ...
+      ]
+    ...
+```
+
+### Custom Cache Adapter
+
 By default, Gamora uses `Gamora.Cache` which uses the `Nebulex.Adapters.Local`.
-Any custom nebulex cache can be used in your application passing the
+Custom Nebulex cache module can be used in your application passing the
 `cache_adapter` configuration:
 
 ```elixir
