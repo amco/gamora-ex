@@ -2,13 +2,14 @@ defmodule Gamora.MixProject do
   use Mix.Project
 
   @source_url "https://github.com/amco/gamora-ex"
-  @version "0.8.0"
+  @version "0.9.0"
 
   def project do
     [
       app: :gamora,
       version: @version,
       elixir: "~> 1.13",
+      elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       package: package(),
       deps: deps(),
@@ -17,6 +18,10 @@ defmodule Gamora.MixProject do
       homepage_url: @source_url
     ]
   end
+
+  # Specifies which paths to compile per environment.
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
 
   # Run "mix help compile.app" to learn about applications.
   def application do
@@ -30,9 +35,12 @@ defmodule Gamora.MixProject do
     [
       {:jason, "~> 1.3"},
       {:oauth2, "~> 2.0"},
+      {:nebulex, "~> 2.5"},
       {:ueberauth, "~> 0.10"},
+      {:faker, "~> 0.17", only: :test},
       {:mock, "~> 0.3.0", only: :test},
-      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false}
     ]
   end
 

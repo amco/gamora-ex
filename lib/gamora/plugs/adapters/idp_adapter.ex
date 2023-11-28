@@ -11,18 +11,18 @@ defmodule Gamora.Plugs.AuthenticatedUser.IdpAdapter do
   """
 
   alias Plug.Conn
-  alias Gamora.API
   alias Gamora.User
+  alias Gamora.Plugs.AuthenticatedUser
+  alias Gamora.Cache.{Userinfo, Introspect}
 
   def call(%Conn{} = conn, opts) do
-    source = Keyword.get(opts, :access_token_source)
-
-    with {:ok, access_token} <- get_access_token(conn, source),
-         {:ok, claims} <- API.userinfo(access_token) do
-      attrs = user_attributes_from_claims(claims)
-      {:ok, struct(User, attrs)}
-    else
-      {:error, error} -> {:error, error}
+    with source <- Keyword.get(opts, :access_token_source),
+         {:ok, access_token} <- get_access_token(conn, source),
+         {:ok, token_data} <- Introspect.fetch(access_token),
+         {:ok, _} <- validate_introspection_data(token_data),
+         {:ok, claims} <- Userinfo.fetch(access_token) do
+      attributes = user_attributes_from_claims(claims)
+      {:ok, struct(User, attributes)}
     end
   end
 
@@ -40,19 +40,38 @@ defmodule Gamora.Plugs.AuthenticatedUser.IdpAdapter do
     end
   end
 
+  defp validate_introspection_data(%{"active" => false}) do
+    {:error, :access_token_invalid}
+  end
+
+  defp validate_introspection_data(%{"active" => true, "client_id" => client_id}) do
+    case Enum.member?(whitelisted_clients(), client_id) do
+      true -> {:ok, :valid_introspect_data}
+      false -> {:error, :access_token_invalid}
+    end
+  end
+
+  defp whitelisted_clients do
+    Application.get_env(:ueberauth, AuthenticatedUser, [])
+    |> Keyword.get(:whitelisted_clients, [])
+    |> Kernel.++([application_client_id()])
+  end
+
+  defp application_client_id do
+    Application.get_env(:ueberauth, Gamora.OAuth, [])
+    |> Keyword.get(:client_id)
+  end
+
   defp user_attributes_from_claims(claims) do
-    Enum.reduce(claims, %{}, fn {claim, value}, attrs ->
-      case claim do
-        "sub" -> Map.put(attrs, :id, value)
-        "roles" -> Map.put(attrs, :roles, value)
-        "email" -> Map.put(attrs, :email, value)
-        "given_name" -> Map.put(attrs, :first_name, value)
-        "family_name" -> Map.put(attrs, :last_name, value)
-        "phone_number" -> Map.put(attrs, :phone_number, value)
-        "email_verified" -> Map.put(attrs, :email_verified, value)
-        "phone_number_verified" -> Map.put(attrs, :phone_number_verified, value)
-        _ -> attrs
-      end
-    end)
+    %{
+      id: claims["sub"],
+      roles: claims["roles"],
+      email: claims["email"],
+      first_name: claims["given_name"],
+      last_name: claims["family_name"],
+      phone_number: claims["phone_number"],
+      email_verified: claims["email_verified"],
+      phone_number_verified: claims["phone_number_verified"]
+    }
   end
 end

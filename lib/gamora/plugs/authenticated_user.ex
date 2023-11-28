@@ -7,24 +7,27 @@ defmodule Gamora.Plugs.AuthenticatedUser do
   tests are running.
   """
 
+  @behaviour Plug
+
   alias Plug.Conn
-  alias Gamora.User
-  alias Gamora.Exceptions
+  alias Gamora.{User, Exceptions}
   alias Gamora.Plugs.AuthenticatedUser
   alias Gamora.Plugs.AuthenticatedUser.IdpAdapter
 
+  @impl Plug
   def init(opts) do
     unless Keyword.get(opts, :error_handler) do
-      raise Exceptions.EmptyErrorHandler
+      raise Exceptions.MissingErrorHandlerOption
     end
 
     unless Keyword.get(opts, :access_token_source) do
-      raise Exceptions.EmptyAccessTokenSource
+      raise Exceptions.MissingAccessTokenSourceOption
     end
 
     opts
   end
 
+  @impl Plug
   def call(%Conn{} = conn, opts) do
     case adapter().call(conn, opts) do
       {:ok, %User{} = user} ->

@@ -11,7 +11,7 @@
     ```elixir
     def deps do
       [
-        {:gamora, "~> 0.8"}
+        {:gamora, "~> 0.9"}
       ]
     end
     ```
@@ -320,6 +320,59 @@ To guard against client-side request modification, it's important to still
 check the domain in `info.urls[:website]` within the `Ueberauth.Auth` struct
 if you want to limit sign-in to a specific domain.
 
+## Cross-Client Identity
+
+By default, gamora will accept only access tokens that were generating
+with the `client_id` in the configuration. If access tokens coming from
+other clients have to be accepted, make sure to add their client ids to
+the `whitelisted_clients` config option.
+
+```elixir
+config :ueberauth, Gamora.Plugs.AuthenticatedUser,
+  whitelisted_clients: ["OTHER_CLIENT_ID"]
+```
+
+## Caching
+
+In order to avoid performing requests to the IDP on each request in the
+application, it is possible to set a caching time for introspection and
+userinfo endpoints. Make sure to not have a too long expiration time for
+`introspect_cache_expires_in` but not too short to impact the application
+performance, it is a balance.
+
+```elixir
+config :ueberauth, Gamora.Plugs.AuthenticatedUser,
+  introspect_cache_expires_in: :timer.seconds(0), # Default value
+  userinfo_cache_expires_in: :timer.minutes(1)    # Default value
+```
+
+Then, add `Gamora.Cache` in `lib/my_app/application.ex`:
+
+```elixir
+defmodule MyApp.Application do
+  use Application
+
+  @impl true
+  def start(_type, _args) do
+    children =
+      [
+        Gamora.Cache,
+        ...
+      ]
+    ...
+```
+
+### Custom Cache Adapter
+
+By default, Gamora uses `Gamora.Cache` which uses the `Nebulex.Adapters.Local`.
+Custom Nebulex cache module can be used in your application passing the
+`cache_adapter` configuration:
+
+```elixir
+config :ueberauth, Gamora.Plugs.AuthenticatedUser,
+  cache_adapter: MyApp.Cache
+```
+
 ## Testing
 
 In test environment you should avoid making requests to authenticate
@@ -336,4 +389,4 @@ config :ueberauth, Gamora.Plugs.AuthenticatedUser,
 Copyright (c) 2022 Amco
 
 Released under the MIT License, which can be found in the repository in
-[LICENSE](https://github.com/amco/ueberauth_amco/blob/master/LICENSE).
+[LICENSE](https://github.com/amco/gamora-ex/blob/master/LICENSE).

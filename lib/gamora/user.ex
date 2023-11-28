@@ -1,4 +1,8 @@
 defmodule Gamora.User do
+  @moduledoc """
+  The user representation.
+  """
+
   @type t :: %__MODULE__{
           id: binary | nil,
           roles: map | nil,

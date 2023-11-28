@@ -5,38 +5,63 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v0.9.0
+
+* Enhancements:
+  * Verify access token using introspect endpoint instead userinfo.
+  * Add `introspect_cache_expires_in` config to avoid hitting the IDP
+    every request. Default value is `:timer.seconds(0)`.
+  * New default value for `userinfo_cache_expires_in` config. Now,
+    the default value is `:timer.seconds(60)`.
+  * Add `whitelisted_clients` config to accept access tokens ONLY
+    from trusted clients. Default value is the same client.
+
+* Breaking changes:
+  * If your application is accepting access tokens from other IDP
+    clients you must set the `whitelisted_clients` config with
+    the client ids that are whitelisted. Otherwise, the application
+    is gonna accept access tokens ONLY from the same client id.
+
 ## v0.8.0
 
-* Add support for `roles` claim.
+* Enhancements:
+  * Add support for `roles` claim.
 
 ## v0.7.0
 
-* Add support for `email_verified` and `phone_number_verified` claims.
+* Enhancements:
+  * Add support for `email_verified` and `phone_number_verified` claims.
 
 ## v0.6.0
 
-* Add support for `max_age` param in the IDP
+* Enhancements:
+  * Add support for `max_age` param in the IDP
 
 ## v0.5.1
 
-* Fix ExDocs according to the new library name.
+* Bug fixes:
+  * Fix ExDocs according to the new library name.
 
 ## v0.5.0
 
-* Add support for `branding` param in the IDP
+* Enhancements:
+  * Add support for `branding` param in the IDP
 
 ## v0.4.0
 
-* Add support for `theme` param in the IDP
+* Enhancements:
+  * Add support for `theme` param in the IDP
 
 ## v0.3.0
 
-* Improve plug adapters
-* Add IdpAdapter and MockAdapter
+* Enhancements:
+  * Improve plug adapters
+  * Add IdpAdapter and MockAdapter
 
 ## v0.2.0
 
-* Add Gamora.User structure to represent user claims.
+* Enhancements:
+  * Add Gamora.User structure to represent user claims.
 
 ## v0.1.0
 
