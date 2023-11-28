@@ -35,6 +35,7 @@ defmodule Gamora.MixProject do
     [
       {:jason, "~> 1.3"},
       {:oauth2, "~> 2.0"},
+      {:nebulex, "~> 2.5"},
       {:ueberauth, "~> 0.10"},
       {:faker, "~> 0.17", only: :test},
       {:mock, "~> 0.3.0", only: :test},

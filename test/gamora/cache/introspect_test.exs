@@ -10,7 +10,7 @@ defmodule Gamora.Cache.IntrospectTest do
   @data %{"active" => true}
 
   setup do
-    options = [introspect_cache_expires_in: 5]
+    options = [introspect_cache_expires_in: :timer.seconds(5)]
     Application.put_env(:ueberauth, AuthenticatedUser, options)
     {:ok, access_token: Faker.String.base64(20)}
   end
@@ -30,7 +30,7 @@ defmodule Gamora.Cache.IntrospectTest do
     end
 
     test "fetches data when cached data has expired", %{access_token: access_token} do
-      options = [introspect_cache_expires_in: 0]
+      options = [introspect_cache_expires_in: :timer.seconds(0)]
       Application.put_env(:ueberauth, AuthenticatedUser, options)
       {:ok, @data} = Introspect.put(access_token, @data)
 
@@ -52,7 +52,7 @@ defmodule Gamora.Cache.IntrospectTest do
     end
 
     test "returns nil when cached data has expired", %{access_token: access_token} do
-      options = [introspect_cache_expires_in: 0]
+      options = [introspect_cache_expires_in: :timer.seconds(0)]
       Application.put_env(:ueberauth, AuthenticatedUser, options)
       {:ok, @data} = Introspect.put(access_token, @data)
       assert {:ok, nil} == Introspect.get(access_token)

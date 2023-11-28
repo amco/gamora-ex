@@ -4,7 +4,7 @@ defmodule Gamora.Cache.Userinfo do
   in the cache in order to improve performance.
   """
 
-  use Gamora.Cache
+  use Gamora.Cache.Actions
 
   alias Gamora.API
   alias Gamora.Plugs.AuthenticatedUser
@@ -28,6 +28,6 @@ defmodule Gamora.Cache.Userinfo do
 
   defp expires_in do
     Application.get_env(:ueberauth, AuthenticatedUser, [])
-    |> Keyword.get(:userinfo_cache_expires_in, 60)
+    |> Keyword.get(:userinfo_cache_expires_in, :timer.seconds(60))
   end
 end

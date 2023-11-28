@@ -338,22 +338,21 @@ In order to avoid performing requests to the IDP on each request in the
 application, it is possible to set a caching time for introspection and
 userinfo endpoints. Make sure to not have a too long expiration time for
 `introspect_cache_expires_in` but not too short to impact the application
-performance, it is a balance. Expiration config is based on seconds.
+performance, it is a balance.
 
 ```elixir
 config :ueberauth, Gamora.Plugs.AuthenticatedUser,
-  introspect_cache_expires_in: 5, # Config in seconds.
-  userinfo_cache_expires_in: 600  # Config in seconds.
+  introspect_cache_expires_in: :timer.seconds(5),
+  userinfo_cache_expires_in: :timer.minutes(10)
 ```
 
-By default, Gamora uses ETS to cache data from IDP but any other cache
-adapter may be implemented, for example using Redix, Nebulex, Cachex or
-any other. See [adapters](https://github.com/amco/gamora-ex/blob/master/CACHE_ADAPTERS.md)
-for more information. Then, specify the adapter in the configuration:
+By default, Gamora uses `Gamora.Cache` which uses the `Nebulex.Adapters.Local`.
+Any custom nebulex cache can be used in your application passing the
+`cache_adapter` configuration:
 
 ```elixir
 config :ueberauth, Gamora.Plugs.AuthenticatedUser,
-  cache_adapter: Gamora.Cache.Adapters.ETS
+  cache_adapter: MyApp.Cache
 ```
 
 ## Testing

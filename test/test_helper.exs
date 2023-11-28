@@ -1,2 +1,2 @@
-:ets.new(:gamora, [:set, :public, :named_table])
+Gamora.Cache.start_link()
 ExUnit.start()
