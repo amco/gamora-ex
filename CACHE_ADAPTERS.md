@@ -1,6 +1,6 @@
 # Gamora - Cache Adapters
 
-> Amco OpenID Connect strategy for Überauth.
+> Examples about different cache implementation for Gamora.
 
 ## ETS
 
