@@ -67,6 +67,7 @@ defmodule Gamora.Plugs.AuthenticatedUser.IdpAdapter do
       id: claims["sub"],
       roles: claims["roles"],
       email: claims["email"],
+      username: claims["username"],
       first_name: claims["given_name"],
       last_name: claims["family_name"],
       phone_number: claims["phone_number"],
