@@ -40,26 +40,11 @@ defmodule Gamora.Plugs.AuthenticatedUser.IdpAdapter do
     end
   end
 
-  defp validate_introspection_data(%{"active" => false}) do
-    {:error, :access_token_invalid}
-  end
-
-  defp validate_introspection_data(%{"active" => true, "client_id" => client_id}) do
-    case Enum.member?(whitelisted_clients(), client_id) do
+  defp validate_introspection_data(%{"active" => active}) do
+    case active do
       true -> {:ok, :valid_introspect_data}
       false -> {:error, :access_token_invalid}
     end
-  end
-
-  defp whitelisted_clients do
-    Application.get_env(:ueberauth, AuthenticatedUser, [])
-    |> Keyword.get(:whitelisted_clients, [])
-    |> Kernel.++([application_client_id()])
-  end
-
-  defp application_client_id do
-    Application.get_env(:ueberauth, Gamora.OAuth, [])
-    |> Keyword.get(:client_id)
   end
 
   defp user_attributes_from_claims(claims) do
