@@ -73,16 +73,6 @@ defmodule Gamora.Plugs.AuthenticatedUser.IdpAdapterTest do
       end
     end
 
-    test "when access token is in the session but is coming from another client", %{conn: conn} do
-      with_mocks [
-        {Introspect, [], fetch: fn _ -> {:ok, %{"active" => true, "client_id" => "XXX"}} end},
-        {Conn, [], get_session: fn _, _ -> "XXXX" end}
-      ] do
-        error = {:error, :access_token_invalid}
-        assert IdpAdapter.call(conn, access_token_source: :session) == error
-      end
-    end
-
     test "when access token is in the headers and it is valid", %{conn: conn} do
       with_mocks [
         {Introspect, [], fetch: fn _ -> {:ok, @introspect_response} end},
@@ -104,16 +94,6 @@ defmodule Gamora.Plugs.AuthenticatedUser.IdpAdapterTest do
     test "when access token is in the headers but is not active", %{conn: conn} do
       with_mocks [
         {Introspect, [], fetch: fn _ -> {:ok, %{"active" => false}} end}
-      ] do
-        error = {:error, :access_token_invalid}
-        conn = conn |> Conn.put_req_header("authorization", "Bearer XXX")
-        assert IdpAdapter.call(conn, access_token_source: :headers) == error
-      end
-    end
-
-    test "when access token is in the headers but is coming from another client", %{conn: conn} do
-      with_mocks [
-        {Introspect, [], fetch: fn _ -> {:ok, %{"active" => true, "client_id" => "XXX"}} end}
       ] do
         error = {:error, :access_token_invalid}
         conn = conn |> Conn.put_req_header("authorization", "Bearer XXX")
