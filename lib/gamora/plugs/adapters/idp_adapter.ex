@@ -12,7 +12,6 @@ defmodule Gamora.Plugs.AuthenticatedUser.IdpAdapter do
 
   alias Plug.Conn
   alias Gamora.User
-  alias Gamora.Plugs.AuthenticatedUser
   alias Gamora.Cache.{Userinfo, Introspect}
 
   def call(%Conn{} = conn, opts) do
