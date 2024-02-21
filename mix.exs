@@ -2,7 +2,7 @@ defmodule Gamora.MixProject do
   use Mix.Project
 
   @source_url "https://github.com/amco/gamora-ex"
-  @version "0.11.0"
+  @version "0.11.1"
 
   def project do
     [
