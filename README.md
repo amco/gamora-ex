@@ -305,6 +305,17 @@ config :ueberauth, Ueberauth,
   ]
 ```
 
+By default IDP will allow users to create new accounts. Account creation
+can be configured either explicitly as a `allow_create` query value on the
+request path or in your configuration:
+
+```elixir
+config :ueberauth, Ueberauth,
+  providers: [
+    amco: {Gamora, [default_allow_create: false]}
+  ]
+```
+
 By default prompt is not present in the authorization url. Prompt can be
 configured either explicitly as a `prompt` query value on the request
 path or in your configuration:
