@@ -20,6 +20,8 @@ defmodule Gamora.Plugs.AuthenticatedUser.TestAdapter do
   defp user_from_assigns(%Conn{} = conn) do
     case conn.assigns[:current_user] do
       %User{} = user -> user
+      :undefined -> {:error, :access_token_required}
+      :invalid -> {:error, :access_token_invalid}
       _ -> nil
     end
   end
