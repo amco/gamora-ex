@@ -14,6 +14,7 @@ defmodule Gamora.Plugs.AuthenticatedUser.TestAdapter do
       {:ok, conn}
     else
       %User{} = user -> {:ok, user}
+      {:error, error} -> {:error, error}
     end
   end
 
