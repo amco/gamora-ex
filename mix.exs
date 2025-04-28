@@ -33,12 +33,12 @@ defmodule Gamora.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:jason, "~> 1.3"},
-      {:oauth2, "~> 2.0"},
-      {:nebulex, "~> 2.5"},
+      {:jason, "~> 1.4"},
+      {:oauth2, "~> 2.1"},
+      {:nebulex, "~> 2.6"},
       {:ueberauth, "~> 0.10"},
-      {:faker, "~> 0.17", only: :test},
-      {:mock, "~> 0.3.0", only: :test},
+      {:faker, "~> 0.18", only: :test},
+      {:mock, "~> 0.3", only: :test},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false}
     ]
