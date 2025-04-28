@@ -46,7 +46,13 @@ defmodule Gamora.OAuth do
 
   def userinfo(access_token, opts \\ []) do
     client = client(opts)
-    data = %{access_token: access_token}
+
+    data =
+      :ueberauth
+      |> Application.get_env(__MODULE__, [])
+      |> Keyword.take([:skip_fetch_roles])
+      |> Keyword.put(:access_token, access_token)
+      |> Enum.into(%{})
 
     OAuth2.Client.post(client, @userinfo_path, data, [
       {"Content-Type", "application/json"}
