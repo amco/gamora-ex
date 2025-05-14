@@ -316,6 +316,17 @@ config :ueberauth, Ueberauth,
   ]
 ```
 
+By default IDP won't allow users to sign in with Amco badge. Amco badge
+strategy can be configured either explicitly as a `allow_amco_badge`
+query value on the request path or in your configuration:
+
+```elixir
+config :ueberauth, Ueberauth,
+  providers: [
+    amco: {Gamora, [default_allow_amco_badge: true]}
+  ]
+```
+
 By default prompt is not present in the authorization url. Prompt can be
 configured either explicitly as a `prompt` query value on the request
 path or in your configuration:

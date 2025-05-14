@@ -70,6 +70,7 @@ defmodule Gamora do
     default_branding: "amco",
     default_strategy: "default",
     default_allow_create: true,
+    default_allow_amco_badge: false,
     default_scope: "openid profile email",
     uid_field: "sub"
 
@@ -100,6 +101,7 @@ defmodule Gamora do
       |> with_query_param(conn, :strategy)
       |> with_query_param(conn, :branding)
       |> with_query_param(conn, :allow_create)
+      |> with_query_param(conn, :allow_amco_badge)
 
     redirect!(conn, Gamora.OAuth.authorize_url!(params, opts))
   end
