@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## v0.16.0
 
 * Enhancements:
-  * Add support assigned current user.
+  * Add support for assigned current user.
 
 ## v0.15.0
 
