@@ -26,6 +26,8 @@ defmodule Gamora.Plugs.AuthenticatedUser.IdpAdapter do
     end
   end
 
+  # TO-DO - This supports legacy scenarios and should be removed when
+  # the whole Amco ecosystem gets fully migrated to IDP.
   defp get_current_user(%Conn{} = conn) do
     case conn.assigns[:current_user] do
       nil -> {:ok, :pending_user}
