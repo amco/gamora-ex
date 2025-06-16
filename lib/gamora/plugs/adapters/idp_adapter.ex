@@ -15,13 +15,21 @@ defmodule Gamora.Plugs.AuthenticatedUser.IdpAdapter do
   alias Gamora.Cache.{Userinfo, Introspect}
 
   def call(%Conn{} = conn, opts) do
-    with source <- Keyword.get(opts, :access_token_source),
+    with {:ok, :pending_user} <- get_current_user(conn),
+         source <- Keyword.get(opts, :access_token_source),
          {:ok, access_token} <- get_access_token(conn, source),
          {:ok, token_data} <- Introspect.fetch(access_token),
          {:ok, _} <- validate_introspection_data(token_data),
          {:ok, claims} <- Userinfo.fetch(access_token) do
       attributes = user_attributes_from_claims(claims)
       {:ok, struct(User, attributes)}
+    end
+  end
+
+  defp get_current_user(%Conn{} = conn) do
+    case conn.assigns[:current_user] do
+      nil -> {:ok, :pending_user}
+      user -> {:ok, user}
     end
   end
 

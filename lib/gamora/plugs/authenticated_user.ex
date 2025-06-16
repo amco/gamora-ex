@@ -33,7 +33,7 @@ defmodule Gamora.Plugs.AuthenticatedUser do
       {:ok, %User{} = user} ->
         Conn.assign(conn, :current_user, user)
 
-      {:ok, %Conn{} = conn} ->
+      {:ok, _response} ->
         conn
 
       {:error, error} ->
