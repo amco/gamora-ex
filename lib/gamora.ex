@@ -94,6 +94,7 @@ defmodule Gamora do
     params =
       []
       |> with_state_param(conn)
+      |> with_query_param(conn, :sp)
       |> with_query_param(conn, :scope)
       |> with_query_param(conn, :theme)
       |> with_query_param(conn, :prompt)
