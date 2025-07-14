@@ -11,7 +11,7 @@
     ```elixir
     def deps do
       [
-        {:gamora, "~> 0.14"}
+        {:gamora, "~> 0.18"}
       ]
     end
     ```

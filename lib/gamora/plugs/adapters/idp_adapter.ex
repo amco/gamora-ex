@@ -64,8 +64,12 @@ defmodule Gamora.Plugs.AuthenticatedUser.IdpAdapter do
       username: claims["username"],
       first_name: claims["given_name"],
       last_name: claims["family_name"],
+      birth_day: claims["birth_day"],
+      birth_month: claims["birth_month"],
       phone_number: claims["phone_number"],
       email_verified: claims["email_verified"],
+      national_id: claims["national_id"],
+      national_id_country: claims["national_id_country"],
       associated_user_id: claims["associated_user_id"],
       phone_number_verified: claims["phone_number_verified"]
     }
