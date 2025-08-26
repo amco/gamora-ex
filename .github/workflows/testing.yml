@@ -1,0 +1,61 @@
+name: Testing
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  checks: write
+
+jobs:
+  test:
+    name: Running tests
+    runs-on: ubuntu-latest
+
+    env:
+      MIX_ENV: test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Detect system info
+        uses: kenchan0130/actions-system-info@master
+        id: system-info
+
+      - name: Setup OTP/Elixir
+        uses: erlef/setup-beam@v1
+        id: setup-beam
+        with:
+          version-type: strict
+          version-file: .tool-versions
+
+      - name: Cache Elixir deps and build
+        uses: actions/cache@v4
+        with:
+          path: |
+            deps
+            _build/test/lib
+          key: "mix-test-build-cache-\
+                ${{ steps.system-info.outputs.name }}-\
+                ${{ steps.system-info.outputs.release }}-\
+                ${{ steps.setup-beam.outputs.otp-version }}-\
+                elixir-${{ steps.setup-beam.outputs.elixir-version }}-\
+                mix.lock-${{ hashFiles('**/mix.lock') }}"
+
+      - name: Install Elixir dependencies
+        run: mix deps.get
+
+      - name: Compile without warnings
+        run: mix compile --warnings-as-errors
+
+      - name: Check code format
+        run: mix format --check-formatted
+
+      - name: Analyze code with credo
+        run: mix credo
+
+      - name: Run tests
+        run: mix test
