@@ -8,7 +8,7 @@ defmodule Gamora.MixProject do
     [
       app: :gamora,
       version: @version,
-      elixir: "~> 1.13",
+      elixir: "~> 1.18",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       package: package(),
