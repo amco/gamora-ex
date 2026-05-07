@@ -47,8 +47,7 @@ defmodule Gamora.Cache.Actions do
       """
       @spec get(access_token :: String.t()) :: {:ok, nil} | {:ok, map()}
       def get(access_token) do
-        data = adapter().get(key(access_token))
-        {:ok, data}
+        adapter().get(key(access_token))
       end
 
       @doc """
