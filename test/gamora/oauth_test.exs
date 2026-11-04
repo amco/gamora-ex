@@ -58,4 +58,25 @@ defmodule Gamora.OAuthTest do
       end
     end
   end
+
+  describe "revoke/2" do
+    test "makes a request to revoke endpoint in IDP" do
+      opts = [site: "https://myidp.example.com"]
+      client = OAuth.client(opts)
+      path = "/oauth2/revoke"
+      headers = [{"Content-Type", "application/json"}]
+
+      data =
+        client
+        |> Map.take([:client_id, :client_secret])
+        |> Map.put(:token, @access_token)
+
+      with_mocks([
+        {Client, [:passthrough],
+         [post: fn ^client, ^path, ^data, ^headers -> {:ok, :response} end]}
+      ]) do
+        assert {:ok, :response} == OAuth.revoke(@access_token, opts)
+      end
+    end
+  end
 end

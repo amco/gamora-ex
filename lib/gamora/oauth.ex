@@ -16,6 +16,7 @@ defmodule Gamora.OAuth do
     authorize_url: "/oauth2/authorize"
   ]
 
+  @revoke_path "/oauth2/revoke"
   @userinfo_path "/oauth2/userinfo"
   @introspect_path "/oauth2/introspect"
 
@@ -68,6 +69,19 @@ defmodule Gamora.OAuth do
       |> Map.put(:token, access_token)
 
     OAuth2.Client.post(client, @introspect_path, data, [
+      {"Content-Type", "application/json"}
+    ])
+  end
+
+  def revoke(access_token, opts \\ []) do
+    client = client(opts)
+
+    data =
+      client
+      |> Map.take([:client_id, :client_secret])
+      |> Map.put(:token, access_token)
+
+    OAuth2.Client.post(client, @revoke_path, data, [
       {"Content-Type", "application/json"}
     ])
   end

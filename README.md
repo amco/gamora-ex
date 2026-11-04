@@ -11,7 +11,7 @@
     ```elixir
     def deps do
       [
-        {:gamora, "~> 0.19"}
+        {:gamora, "~> 0.20"}
       ]
     end
     ```
@@ -151,6 +151,10 @@ defmodule MyAppWeb.AuthController do
   end
 
   def logout(conn, _params) do
+    if access_token = get_session(conn, :access_token) do
+      Gamora.API.revoke(access_token)
+    end
+
     conn
     |> put_session(:access_token, nil)
     |> put_session(:refresh_token, nil)
