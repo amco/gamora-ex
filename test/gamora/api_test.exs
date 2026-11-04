@@ -51,10 +51,10 @@ defmodule Gamora.APITest do
     @failure_response %Response{status_code: 401, body: %{"error" => "invalid_client"}}
 
     setup do
-      Application.put_env(:ueberauth, AuthenticatedUser, [
+      Application.put_env(:ueberauth, AuthenticatedUser,
         userinfo_cache_expires_in: :timer.seconds(5),
         introspect_cache_expires_in: :timer.seconds(5)
-      ])
+      )
     end
 
     test "revokes the token and clears cached data" do
